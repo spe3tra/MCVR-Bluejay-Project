@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: 
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/MainSceneHandTrack.unity
+    guid: c8caddc1af5d0a44985a9f9ceb64217d
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: cdcc7dbbfab2e0d46963baa6defef393,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 3627ec0a0aa92b34d9c724cdd6ab4785,
+      type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 65042593d4d784044819b622ff059b3d,
+      type: 2}
