@@ -15,6 +15,10 @@ public class InteractionScript : MonoBehaviour
     // Arm Canvas
     private Transform lCanvas, rCanvas;
     private List<GameObject> UIElementsToAnimate = new List<GameObject>();
+    public Text debugUIText;
+    // Arm Debug
+    private string prevDebugMessage;
+    private int debugRepeatMessageCount = 0;
 
     private Transform tPlayer, lArm, rArm, headCamera;
 
@@ -22,6 +26,7 @@ public class InteractionScript : MonoBehaviour
     private void Awake()
     {
         PlayerPrefs.GetFloat("VolumeUI", 0.75f);
+        prevDebugMessage = "Game awake";
     }
 
 
@@ -129,5 +134,21 @@ public class InteractionScript : MonoBehaviour
     public void ExitApplication()
     {
         Application.Quit();
+    }
+
+    public void UILog(string debugMessage)
+    {
+        string finalUIDebug = debugMessage;
+        if (prevDebugMessage == debugMessage)
+        {
+            debugRepeatMessageCount += 1;
+            finalUIDebug = "(" + debugRepeatMessageCount + ") " + debugMessage;
+        } else
+        {
+            debugRepeatMessageCount = 0;
+            prevDebugMessage = debugMessage;
+        }
+
+        debugUIText.text = prevDebugMessage + ("\n") + finalUIDebug;
     }
 }
