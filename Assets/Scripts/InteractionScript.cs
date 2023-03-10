@@ -151,10 +151,14 @@ public class InteractionScript : MonoBehaviour
 
     private void SearchForDroneRight(InputAction.CallbackContext context)
     {
-        if (isTargetting && targetReticle.activeSelf)
+        if (isTargetting && targetReticle.activeSelf && targetImage.color != Color.red)
         {
             // If in targetting mode, add the position 
             GetComponent<DroneManager>().SetDroneOrders(targetReticle);
+            PlaySound(3);
+        } else if (isTargetting && targetReticle.activeSelf)
+        {
+            PlaySound(4);
         }
         SearchForDroneMain(rArm, "right");
     }
