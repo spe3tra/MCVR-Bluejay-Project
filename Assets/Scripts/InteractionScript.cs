@@ -97,17 +97,51 @@ public class InteractionScript : MonoBehaviour
     }
 
 
-    // Script to see if a drone is in the selection ray
+    // Script to see if a drone is in the selection ray when trigger is pressed
     private void SearchForDroneLeft(InputAction.CallbackContext context)
     {
-        RaycastOut(lArm);
-        UILog("Raycast out from left arm");
+        SearchForDroneMain(lArm);
     }
 
     private void SearchForDroneRight(InputAction.CallbackContext context)
     {
-        UILog("Raycast out from right arm");
-        RaycastOut(rArm);
+        SearchForDroneMain(rArm);
+    }
+
+    private void SearchForDroneMain(Transform controller)
+    {
+        // Shoot out raycast
+        RaycastHit hit = RaycastOut(controller);
+        // Start log message
+        string logMessage = "Raycast from left arm";
+
+        // Try and get game object the ray has collided with
+        try
+        {
+            // Check if a drone was found
+            if (hit.transform.tag == "Drone")
+            {
+                logMessage += ", drone found with tag " + hit.transform.tag;
+                // Assign selected drone to drone manager
+                GetComponent<DroneManager>().SelectDrone(hit.transform.gameObject);
+            }
+            else if (hit.transform.tag == "Subpart")
+            {
+                // If a sub part of a drone is hit
+                logMessage += ", drone subpart found with tag " + hit.transform.tag;
+                // Assign parent to drone manager
+                GetComponent<DroneManager>().SelectDrone(hit.transform.parent.gameObject);
+            }
+            else
+            {
+                logMessage += ", object found with tag " + hit.transform.tag;
+            }
+        } catch
+        {
+            logMessage += ", error retrieving object";
+        }
+
+        UILog(logMessage);
     }
 
     RaycastHit RaycastOut(Transform controllerTransform)

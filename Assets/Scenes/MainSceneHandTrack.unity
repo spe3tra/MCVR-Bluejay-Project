@@ -1466,8 +1466,8 @@ GameObject:
   m_Component:
   - component: {fileID: 351286761}
   - component: {fileID: 351286762}
-  - component: {fileID: 351286763}
   - component: {fileID: 351286764}
+  - component: {fileID: 351286763}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1626,7 +1626,8 @@ MonoBehaviour:
   - {fileID: 795121636}
   - {fileID: 434583120}
   - {fileID: 296952892}
-  droneInfoPanel: {fileID: 0}
+  droneInfoPanel: {fileID: 1293075158}
+  droneInfoNameText: {fileID: 1454671359}
   sliderRed: {fileID: 1747368792}
   sliderGreen: {fileID: 641724595}
   sliderBlue: {fileID: 56990249}
@@ -3004,6 +3005,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 1293075158}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 351286764}
+        m_TargetAssemblyTypeName: DroneManager, Assembly-CSharp
+        m_MethodName: DeselectDrone
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

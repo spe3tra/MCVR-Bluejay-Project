@@ -15,6 +15,7 @@ public class DroneManager : MonoBehaviour
 
     // UI
     public GameObject droneInfoPanel;
+    public Text droneInfoNameText;
 
 
     // Color Changer
@@ -92,6 +93,21 @@ public class DroneManager : MonoBehaviour
         sliderRed.value = currentDroneColor.r;
         sliderGreen.value = currentDroneColor.g;
         sliderBlue.value = currentDroneColor.b;
+    }
+
+    // Select a drone, and retrieve it's index
+    public void SelectDrone(GameObject droneToSelect)
+    {
+        selectedDrone = droneToSelect;
+        selectedDroneIndex = allDroneList.IndexOf(droneToSelect);
+        // Get drone info from index
+        droneInfoNameText.text = droneDataList[selectedDroneIndex].droneName;
+        // Enable interacter screen
+        if (!droneInfoPanel.activeInHierarchy)
+        {
+            InteractionScript.CORE.ToggleUIWithSound(droneInfoPanel);
+        }
+        GetColor();
     }
 
     // deselect the current drone
