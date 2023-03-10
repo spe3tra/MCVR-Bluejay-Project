@@ -98,6 +98,15 @@ public class DroneManager : MonoBehaviour
     // Select a drone, and retrieve it's index
     public void SelectDrone(GameObject droneToSelect)
     {
+        if (selectedDrone == droneToSelect)
+        {
+            InteractionScript.CORE.ToggleTargetting();
+            selectedDrone = droneToSelect;
+        } else
+        {
+            selectedDrone = droneToSelect;
+            InteractionScript.CORE.ToggleTargetting(false);
+        }
         selectedDrone = droneToSelect;
         selectedDroneIndex = allDroneList.IndexOf(droneToSelect);
         // Get drone info from index
@@ -119,6 +128,15 @@ public class DroneManager : MonoBehaviour
     {
         selectedDrone = null;
         selectedDroneIndex = -1;
+        InteractionScript.CORE.ToggleTargetting(false);
+    }
+
+    // Set the Navmesh point of a drone
+    public void SetDroneOrders(GameObject moveToPoint)
+    {
+        droneDataList[selectedDroneIndex].nextWaypoint = moveToPoint.transform.position;
+        NavMeshAgent droneNav = allDroneList[selectedDroneIndex].GetComponent<NavMeshAgent>();
+        droneNav.destination = moveToPoint.transform.position;
     }
 
     // Enable disable the Navmesh Agent

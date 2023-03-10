@@ -10,6 +10,7 @@ public class DroneClass
 
     // Position
     public List<string> droneOrders;
+    public Vector3 nextWaypoint;
     public Vector3 lastPosition;
 
     // Values

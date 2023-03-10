@@ -28,6 +28,12 @@ public class InteractionScript : MonoBehaviour
     // Controls
     public InputActionReference leftTriggerActionRef, rightTriggerActionRef;
 
+    // Drone order reticle
+    public GameObject targetReticle;
+    public bool isTargetting = false;
+    public GameObject orderTargetImage, cancelTargetImage;
+    public Text orderText;
+    public Image targetImage;
 
     private void Awake()
     {
@@ -44,6 +50,9 @@ public class InteractionScript : MonoBehaviour
         // Load settings
         PlayerPrefs.GetFloat("VolumeUI", 0.75f);
         prevDebugMessage = "Game awake";
+
+        // Hide target reticle
+        ToggleTargetting(false);
 
         // Setup controls
         leftTriggerActionRef.action.started += SearchForDroneLeft;
@@ -66,7 +75,44 @@ public class InteractionScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        // if setting an order, update location of targetting
+        RaycastHit hit;
+        if (isTargetting)
+        {
+            hit = RaycastOut(rArm);
+            try
+            {
+                targetReticle.SetActive(true);
+                Vector3 newPos = Vector3.zero;
+                newPos.y = 0;
+                newPos += hit.point;
+
+                // If touching the minimap or the ground, set color to white
+                if (hit.transform.tag == "Minimap")
+                {
+                    transform.localScale = Vector3.one * 0.1f;
+                    targetImage.color = Color.blue;
+                    newPos.y = 0.34f;
+                } else if (hit.transform.tag == "Ground")
+                {
+                    transform.localScale = Vector3.one;
+                    targetImage.color = Color.white;
+                    newPos.y = 0;
+                } else
+                {
+                    // Otherwise set color to red
+                    targetImage.color = Color.red;
+                }
+
+                // set reticle position
+                targetReticle.transform.position = newPos;
+            }
+            catch
+            {
+                targetReticle.SetActive(false);
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -105,6 +151,11 @@ public class InteractionScript : MonoBehaviour
 
     private void SearchForDroneRight(InputAction.CallbackContext context)
     {
+        if (isTargetting && targetReticle.activeSelf)
+        {
+            // If in targetting mode, add the position 
+            GetComponent<DroneManager>().SetDroneOrders(targetReticle);
+        }
         SearchForDroneMain(rArm, "right");
     }
 
@@ -147,13 +198,14 @@ public class InteractionScript : MonoBehaviour
     RaycastHit RaycastOut(Transform controllerTransform)
     {
         RaycastHit hit;
-        if (Physics.Raycast(controllerTransform.position, controllerTransform.forward, out hit, 30))
+        if (Physics.Raycast(controllerTransform.position, controllerTransform.forward, out hit, 90))
         {
             Debug.DrawLine(transform.position, hit.point, Color.yellow);
         }
 
         return hit;
     }
+
 
     // Called to toggle a UI pannel on and off
     public void ToggleUI(GameObject UIToToggle)
@@ -214,6 +266,37 @@ public class InteractionScript : MonoBehaviour
         Application.Quit();
     }
 
+    // Toggle the targetting reticle
+    public void ToggleTargetting()
+    {
+        ToggleTargetting(!isTargetting);
+    }
+
+    public void ToggleTargetting(bool newValue)
+    {
+        // if starting targetting
+        if (newValue)
+        {
+            isTargetting = true;
+            orderText.text = "Cancel";
+            // hide arrow, show cancel image
+            orderTargetImage.SetActive(false);
+            cancelTargetImage.SetActive(true);
+            // show game object
+            targetReticle.SetActive(true);
+        } else
+        {
+            isTargetting = false;
+            orderText.text = "Order";
+            // show arrow, hide cancel image
+            orderTargetImage.SetActive(true);
+            cancelTargetImage.SetActive(false);
+            // hide game object
+            targetReticle.SetActive(false);
+
+        }
+    }
+
     // Write a specific string to the left arm debug text log
     public void UILog(string debugMessage)
     {
@@ -230,6 +313,5 @@ public class InteractionScript : MonoBehaviour
 
         debugUIText.text = prevDebugMessage + ("\n") + finalUIDebug;
     }
-
 
 }
