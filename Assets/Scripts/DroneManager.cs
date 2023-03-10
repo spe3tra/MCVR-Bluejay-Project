@@ -106,6 +106,9 @@ public class DroneManager : MonoBehaviour
         if (!droneInfoPanel.activeInHierarchy)
         {
             InteractionScript.CORE.ToggleUIWithSound(droneInfoPanel);
+        } else
+        {
+            InteractionScript.CORE.PlaySound(0);
         }
         GetColor();
     }

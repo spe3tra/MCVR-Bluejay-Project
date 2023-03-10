@@ -21,7 +21,7 @@ public class DroneClass
     /// </summary>
     public DroneClass()
     {
-        droneName = "Loading Drone " + Random.Range(1, 9999);
+        droneName = "Loading Drone " + Random.Range(1, 999) + "-" + (char)('A' + Random.Range(0, 26));
         droneColor = Color.yellow;
         droneOrders = new List<string>();
         lastPosition = Vector3.zero;
