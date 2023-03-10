@@ -88,7 +88,28 @@ PrefabInstance:
       propertyPath: m_Constraints
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7289863276790702011, guid: 8b880d426e9381140ade4a260330552e,
+        type: 3}
+      propertyPath: m_Animation
+      value: 
+      objectReference: {fileID: 7400000, guid: 4e08946f68aea6845b72c8a91e949d7e, type: 2}
+    - target: {fileID: 7289863276790702011, guid: 8b880d426e9381140ade4a260330552e,
+        type: 3}
+      propertyPath: m_Animations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7289863276790702011, guid: 8b880d426e9381140ade4a260330552e,
+        type: 3}
+      propertyPath: m_Animations.Array.data[0]
+      value: 
+      objectReference: {fileID: 7400000, guid: 4e08946f68aea6845b72c8a91e949d7e, type: 2}
+    - target: {fileID: 7289863276790702011, guid: 8b880d426e9381140ade4a260330552e,
+        type: 3}
+      propertyPath: m_Animations.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7289863276790702011, guid: 8b880d426e9381140ade4a260330552e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

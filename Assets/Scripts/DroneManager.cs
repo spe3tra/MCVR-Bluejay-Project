@@ -105,10 +105,11 @@ public class DroneManager : MonoBehaviour
         // Enable interacter screen
         if (!droneInfoPanel.activeInHierarchy)
         {
-            InteractionScript.CORE.ToggleUIWithSound(droneInfoPanel);
+            InteractionScript.CORE.ToggleUI(droneInfoPanel);
+            InteractionScript.CORE.PlaySound(2);
         } else
         {
-            InteractionScript.CORE.PlaySound(0);
+            InteractionScript.CORE.PlaySound(2);
         }
         GetColor();
     }

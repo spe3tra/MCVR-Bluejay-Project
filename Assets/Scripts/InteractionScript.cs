@@ -100,20 +100,20 @@ public class InteractionScript : MonoBehaviour
     // Script to see if a drone is in the selection ray when trigger is pressed
     private void SearchForDroneLeft(InputAction.CallbackContext context)
     {
-        SearchForDroneMain(lArm);
+        SearchForDroneMain(lArm, "left");
     }
 
     private void SearchForDroneRight(InputAction.CallbackContext context)
     {
-        SearchForDroneMain(rArm);
+        SearchForDroneMain(rArm, "right");
     }
 
-    private void SearchForDroneMain(Transform controller)
+    private void SearchForDroneMain(Transform controller, string logStart)
     {
         // Shoot out raycast
         RaycastHit hit = RaycastOut(controller);
         // Start log message
-        string logMessage = "Raycast from left arm";
+        string logMessage = "Raycast from " + logStart + " arm";
 
         // Try and get game object the ray has collided with
         try
