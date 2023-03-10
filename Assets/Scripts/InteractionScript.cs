@@ -35,6 +35,12 @@ public class InteractionScript : MonoBehaviour
     public Text orderText;
     public Image targetImage;
 
+    // Timer
+    public Text timeText;
+    int timeMinutes = 32;
+    int timeSeconds = 0;
+    int timeTracker = 0;
+
     private void Awake()
     {
         // Set static reference to self
@@ -49,6 +55,8 @@ public class InteractionScript : MonoBehaviour
 
         // Load settings
         PlayerPrefs.GetFloat("VolumeUI", 0.75f);
+        timeMinutes = PlayerPrefs.GetInt("TimeMinutes", 32);
+        timeSeconds = PlayerPrefs.GetInt("TimeSeconds", 0);
         prevDebugMessage = "Game awake";
 
         // Hide target reticle
@@ -120,6 +128,42 @@ public class InteractionScript : MonoBehaviour
         //Debug.Log(headCamera.position);
         //Debug.Log(lArm.position);
         //Debug.Log(rArm.position);
+
+        // Time tracker
+        if (timeTracker >= 50)
+        {
+            // if greater than 20, decrease time
+            timeTracker = 0;
+            timeSeconds -= 1;
+            // Save current time
+            PlayerPrefs.SetInt("TimeSeconds", timeSeconds);
+            if (timeSeconds == -1)
+            {
+                PlayerPrefs.SetInt("TimeSeconds", 59);
+                timeSeconds = 59;
+                timeMinutes -= 1;
+                PlayerPrefs.SetInt("TimeMinutes", timeMinutes);
+                if (timeMinutes <= -1)
+                {
+                    // When time runs out, game is over
+                    PlayerPrefs.SetInt("TimeMinutes", 1);
+                    ExitApplication();
+                }
+            }
+            // Update UI
+            if (timeSeconds >= 10)
+            {
+                timeText.text = timeMinutes + ":" + timeSeconds;
+            } else
+            {
+                timeText.text = timeMinutes + ":0" + timeSeconds;
+            }
+            // Play sound
+            PlaySoundLeft(5);
+        } else
+        {
+            timeTracker += 1;
+        }
 
         //Raycast look for object
 
