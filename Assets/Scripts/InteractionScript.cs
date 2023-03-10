@@ -6,7 +6,9 @@ using UnityEngine.UI;
 [RequireComponent(typeof(AudioSource))]
 public class InteractionScript : MonoBehaviour
 {
-   
+
+    static InteractionScript CORE;
+
     // Audio
     public List<AudioClip> aClips = new List<AudioClip>();
     private AudioSource aSource;
@@ -25,6 +27,17 @@ public class InteractionScript : MonoBehaviour
 
     private void Awake()
     {
+        // Set static reference to self
+        // If a duplicate exists, delete self
+        if (CORE == null)
+        {
+            CORE = this;
+        } else
+        {
+            Destroy(this.gameObject);
+        }
+
+        // Load settings
         PlayerPrefs.GetFloat("VolumeUI", 0.75f);
         prevDebugMessage = "Game awake";
     }
@@ -53,7 +66,8 @@ public class InteractionScript : MonoBehaviour
         //Debug.Log(headCamera.position);
         //Debug.Log(lArm.position);
         //Debug.Log(rArm.position);
-        // Animate UI Elements loading in
+
+        // Animate UI Elements loading in if needed
         if (UIElementsToAnimate.Count != 0)
         {
             foreach (GameObject g in UIElementsToAnimate)
@@ -72,16 +86,13 @@ public class InteractionScript : MonoBehaviour
         }
     }
 
-    public void Hello()
-    {
-
-    }
-
+    // Called to toggle a UI pannel on and off
     public void ToggleUI(GameObject UIToToggle)
     {
         UIToToggle.SetActive(!UIToToggle.activeSelf);
     }
 
+    // Same as ToggleUI, but plays a specific sound
     public void ToggleUIWithSound(GameObject UIToToggle)
     {
         UIToToggle.SetActive(!UIToToggle.activeSelf);
@@ -96,11 +107,7 @@ public class InteractionScript : MonoBehaviour
         }
     }
 
-    public void WhatsUp(GameObject selectedObject)
-    {
-
-    }
-
+    // Play a specific sound on the aClips list
     public void PlaySound(int soundID)
     {
         aSource.Stop();
@@ -108,6 +115,7 @@ public class InteractionScript : MonoBehaviour
         aSource.PlayOneShot(aClips[soundID], UIVolume);
     }
 
+    // Play a specific sound on the aClips list at the position of the left controller
     public void PlaySoundLeft(int soundID)
     {
         aSource.Stop();
@@ -115,6 +123,7 @@ public class InteractionScript : MonoBehaviour
         aSource.PlayOneShot(aClips[soundID], UIVolume);
     }
 
+    // Play a specific sound on the aClips list at the position of the right controller
     public void PlaySoundRight(int soundID)
     {
         aSource.Stop();
@@ -122,7 +131,7 @@ public class InteractionScript : MonoBehaviour
         aSource.PlayOneShot(aClips[soundID], UIVolume);
     }
 
-    // Change Settings Values
+    // Called by the volume slider to adjust and save the sound volume of the UI elements
     public void SettingsUIVolume(Slider volume)
     {
         PlayerPrefs.SetFloat("VolumeUI", volume.value);
@@ -136,6 +145,7 @@ public class InteractionScript : MonoBehaviour
         Application.Quit();
     }
 
+    // Write a specific string to the left arm debug text log
     public void UILog(string debugMessage)
     {
         string finalUIDebug = debugMessage;
@@ -151,4 +161,6 @@ public class InteractionScript : MonoBehaviour
 
         debugUIText.text = prevDebugMessage + ("\n") + finalUIDebug;
     }
+
+
 }
