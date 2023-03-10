@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(AudioSource))]
 public class InteractionScript : MonoBehaviour
 {
-
-    static InteractionScript CORE;
+    // Reference to self
+    public static InteractionScript CORE;
 
     // Audio
     public List<AudioClip> aClips = new List<AudioClip>();
@@ -23,6 +24,9 @@ public class InteractionScript : MonoBehaviour
     private int debugRepeatMessageCount = 0;
 
     private Transform tPlayer, lArm, rArm, headCamera;
+
+    // Controls
+    public InputActionReference leftTriggerActionRef, rightTriggerActionRef;
 
 
     private void Awake()
@@ -40,6 +44,10 @@ public class InteractionScript : MonoBehaviour
         // Load settings
         PlayerPrefs.GetFloat("VolumeUI", 0.75f);
         prevDebugMessage = "Game awake";
+
+        // Setup controls
+        leftTriggerActionRef.action.started += SearchForDroneLeft;
+        rightTriggerActionRef.action.started += SearchForDroneRight;
     }
 
 
@@ -67,6 +75,8 @@ public class InteractionScript : MonoBehaviour
         //Debug.Log(lArm.position);
         //Debug.Log(rArm.position);
 
+        //Raycast look for object
+
         // Animate UI Elements loading in if needed
         if (UIElementsToAnimate.Count != 0)
         {
@@ -84,6 +94,31 @@ public class InteractionScript : MonoBehaviour
                 }
             }
         }
+    }
+
+
+    // Script to see if a drone is in the selection ray
+    private void SearchForDroneLeft(InputAction.CallbackContext context)
+    {
+        RaycastOut(lArm);
+        UILog("Raycast out from left arm");
+    }
+
+    private void SearchForDroneRight(InputAction.CallbackContext context)
+    {
+        UILog("Raycast out from right arm");
+        RaycastOut(rArm);
+    }
+
+    RaycastHit RaycastOut(Transform controllerTransform)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(controllerTransform.position, controllerTransform.forward, out hit, 30))
+        {
+            Debug.DrawLine(transform.position, hit.point, Color.yellow);
+        }
+
+        return hit;
     }
 
     // Called to toggle a UI pannel on and off

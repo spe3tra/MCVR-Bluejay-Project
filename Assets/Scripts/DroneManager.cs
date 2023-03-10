@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class DroneManager : MonoBehaviour
 {
@@ -20,7 +21,6 @@ public class DroneManager : MonoBehaviour
     Color droneColorSet = Color.white;
     public Slider sliderRed, sliderGreen, sliderBlue;
     public Image colorReference;
-
 
 
     // Start is called before the first frame update
@@ -66,15 +66,21 @@ public class DroneManager : MonoBehaviour
     // Set the drone color, and the 
     public void ChangeDroneColorFinal()
     {
-        // Set color of UI element
-        colorReference.color = droneColorSet;
-        // Set saved drone color
-        droneDataList[selectedDroneIndex].droneColor = droneColorSet;
-        // set color of drone game object
-        Renderer selectedDroneRenderer = selectedDrone.GetComponent<Renderer>();
-        var colorBlock = new MaterialPropertyBlock();
-        colorBlock.SetColor("_BaseColor", droneColorSet);
-        selectedDroneRenderer.SetPropertyBlock(colorBlock);
+        if (selectedDroneIndex != -1)
+        {
+            // Set color of UI element
+            colorReference.color = droneColorSet;
+            // Set saved drone color
+            droneDataList[selectedDroneIndex].droneColor = droneColorSet;
+            // set color of drone game object
+            Renderer selectedDroneRenderer = selectedDrone.GetComponent<Renderer>();
+            var colorBlock = new MaterialPropertyBlock();
+            colorBlock.SetColor("_BaseColor", droneColorSet);
+            selectedDroneRenderer.SetPropertyBlock(colorBlock);
+        } else
+        {
+            InteractionScript.CORE.UILog("No Drone Selected to change color");
+        }
     }
 
     public void GetColor()
@@ -86,5 +92,25 @@ public class DroneManager : MonoBehaviour
         sliderRed.value = currentDroneColor.r;
         sliderGreen.value = currentDroneColor.g;
         sliderBlue.value = currentDroneColor.b;
+    }
+
+    // deselect the current drone
+    public void DeselectDrone()
+    {
+        selectedDrone = null;
+        selectedDroneIndex = -1;
+    }
+
+    // Enable disable the Navmesh Agent
+    public void ToggleNavmesh()
+    {
+        NavMeshAgent droneNavMesh = selectedDrone.GetComponent<NavMeshAgent>();
+        droneNavMesh.enabled = !droneNavMesh.enabled;
+    }
+
+    public void ToggleNavmesh(GameObject droneToToggle)
+    {
+        NavMeshAgent droneNavMesh = droneToToggle.GetComponent<NavMeshAgent>();
+        droneNavMesh.enabled = !droneNavMesh.enabled;
     }
 }
